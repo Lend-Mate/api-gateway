@@ -7,26 +7,26 @@ spring:
     name: api-gateway
   data:
     redis:
-      host: localhost
+      host: redis
       port: 6379
   cloud:
     gateway:
       routes:
         - id: user_service_route
-          uri: http://localhost:8081
+          uri: http://user-service:8080
           predicates:
             - Path=/auth/**,/user/**
           filters:
             - name: RequestRateLimiter
               args:
-                redis-rate-limiter.replenishRate: 1
-                redis-rate-limiter.burstCapacity: 3
+                redis-rate-limiter.replenishRate: 1 # her saniyede kaç tane request atma hakkı eklensin
+                redis-rate-limiter.burstCapacity: 3 # maksimum request atma hakkı
                 key-resolver: "#{@userKeyResolver}"
 
         - id: product_service_route
-          uri: http://localhost:8082
+          uri: http://product-service:8082
           predicates:
-            - Path=/api/v1/products/**
+            - Path=/api/v1/products/**,/api/v1/categories/**,/api/v1/product-availability/**,/api/v1/product-image/**,/api/files/**
           filters:
             - name: RequestRateLimiter
               args:
