@@ -24,6 +24,7 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
     public Mono<Void> filter(ServerWebExchange exchange,
                              GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
+        System.out.println("request.getURI().getPath() " + request.getURI().getPath());
         boolean isPublic = SecurityPaths.PUBLIC_PATHS.stream()
                 .anyMatch(path -> request.getURI().getPath().startsWith(path));
 
