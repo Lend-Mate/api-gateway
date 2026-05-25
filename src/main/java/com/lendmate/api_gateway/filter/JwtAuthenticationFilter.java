@@ -27,6 +27,7 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
         System.out.println("request.getURI().getPath() " + request.getURI().getPath());
         boolean isPublic = SecurityPaths.PUBLIC_PATHS.stream()
                 .anyMatch(path -> request.getURI().getPath().startsWith(path));
+        System.out.println("isPublic" + isPublic);
 
         if (!isPublic) {
             if (!request.getHeaders().containsKey("Authorization")) {
