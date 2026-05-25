@@ -1,0 +1,13 @@
+networks:
+  lendmate-net:
+    external: true
+
+services:
+  api-gateway:
+    build: .
+    container_name: api-gateway
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    networks:
+      - lendmate-net
