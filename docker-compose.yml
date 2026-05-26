@@ -4,6 +4,7 @@ networks:
 
 services:
   api-gateway:
+    image: "api-gateway"
     build: .
     container_name: api-gateway
     expose:
