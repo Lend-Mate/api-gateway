@@ -7,8 +7,6 @@ services:
     image: "api-gateway"
     build: .
     container_name: api-gateway
-    expose:
-      - "8080"
     restart: unless-stopped
     networks:
       - lendmate-net
