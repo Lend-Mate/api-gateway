@@ -23,7 +23,7 @@ spring:
     gateway:
       routes:
         - id: swagger_ui
-          uri: http://localhost:8080
+          uri: http://api-gateway:8080
           predicates:
             - Path=/swagger-ui/**,/webjars/**,/v3/api-docs/**
           filters:
