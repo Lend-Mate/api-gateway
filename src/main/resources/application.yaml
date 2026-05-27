@@ -11,6 +11,8 @@ springdoc:
         url: /product-service/v3/api-docs
       - name: user-service
         url: /user-service/v3/api-docs
+  webjars:
+    prefix: ""
 
 spring:
   application:
@@ -22,12 +24,6 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: swagger_ui
-          uri: http://api-gateway:8080
-          predicates:
-            - Path=/swagger-ui/**,/webjars/**,/v3/api-docs/**
-          filters:
-            - RewritePath=/(?<segment>.*), /${segment}
         - id: user_service_route
           uri: http://user-service:8080
           predicates:
