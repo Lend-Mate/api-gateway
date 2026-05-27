@@ -10,6 +10,9 @@ public class SecurityPaths {
             "/auth/register",
             "/auth/refresh",
             "/user-service/v3/api-docs",
-            "/product-service/v3/api-docs"
+            "/product-service/v3/api-docs",
+            "/swagger-ui",
+            "/webjars",
+            "/v3/api-docs"
     );
 }

@@ -5,13 +5,12 @@ server:
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
+    config-url: /v3/api-docs/swagger-config
     urls:
       - name: product-service
-        url: /api/product-service/v3/api-docs
+        url: /product-service/v3/api-docs
       - name: user-service
-        url: /api/user-service/v3/api-docs
-  webjars:
-    prefix: /api
+        url: /user-service/v3/api-docs
 
 spring:
   application:
@@ -23,6 +22,12 @@ spring:
   cloud:
     gateway:
       routes:
+        - id: swagger_ui
+          uri: http://localhost:8080
+          predicates:
+            - Path=/swagger-ui/**,/webjars/**,/v3/api-docs/**
+          filters:
+            - RewritePath=/(?<segment>.*), /${segment}
         - id: user_service_route
           uri: http://user-service:8080
           predicates:
