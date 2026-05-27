@@ -2,6 +2,14 @@
 server:
   port: 8080 # The port for your API Gateway
 
+springdoc:
+  swagger-ui:
+    urls:
+      - name: product-service
+        url: /product-service/v3/api-docs
+      - name: user-service
+        url: /user-service/v3/api-docs
+
 spring:
   application:
     name: api-gateway
@@ -22,6 +30,12 @@ spring:
                 redis-rate-limiter.replenishRate: 1 # her saniyede kaç tane request atma hakkı eklensin
                 redis-rate-limiter.burstCapacity: 3 # maksimum request atma hakkı
                 key-resolver: "#{@userKeyResolver}"
+        - id: user_service_docs
+          uri: http://user-service:8080
+          predicates:
+            - Path=/user-service/v3/api-docs
+          filters:
+            - RewritePath=/user-service/(?<segment>.*), /${segment}
 
         - id: product_service_route
           uri: http://product-service:8080
@@ -33,3 +47,9 @@ spring:
                 redis-rate-limiter.replenishRate: 20
                 redis-rate-limiter.burstCapacity: 40
                 key-resolver: "#{@userKeyResolver}"
+        - id: product_service_docs
+          uri: http://product-service:8080
+          predicates:
+            - Path=/product-service/v3/api-docs
+          filters:
+            - RewritePath=/product-service/(?<segment>.*), /${segment}

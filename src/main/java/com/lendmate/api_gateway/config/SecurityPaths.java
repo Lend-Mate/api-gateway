@@ -8,6 +8,8 @@ public class SecurityPaths {
             "/auth/health",
             "/auth/login",
             "/auth/register",
-            "/auth/refresh"
+            "/auth/refresh",
+            "/user-service/v3/api-docs",
+            "/product-service/v3/api-docs"
     );
 }
