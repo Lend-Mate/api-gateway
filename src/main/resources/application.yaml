@@ -5,12 +5,12 @@ server:
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
-    config-url: /v3/api-docs/swagger-config
+    config-url: /api/v3/api-docs/swagger-config
     urls:
       - name: product-service
-        url: /product-service/v3/api-docs
+        url: /api/product-service/v3/api-docs
       - name: user-service
-        url: /user-service/v3/api-docs
+        url: /api/user-service/v3/api-docs
   webjars:
     prefix: ""
 
