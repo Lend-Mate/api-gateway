@@ -57,3 +57,21 @@ spring:
             - Path=/product-service/v3/api-docs
           filters:
             - RewritePath=/product-service/(?<segment>.*), /${segment}
+
+
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowed-origins:
+              - "http://178.104.91.123"
+              - "http://localhost:3000"
+            allowed-methods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowed-headers:
+              - "*"
+            allow-credentials: true
+            max-age: 3600
