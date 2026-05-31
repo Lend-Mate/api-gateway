@@ -75,3 +75,8 @@ spring:
               - "*"
             allow-credentials: true
             max-age: 3600
+
+      security:
+        enabled: true
+
+

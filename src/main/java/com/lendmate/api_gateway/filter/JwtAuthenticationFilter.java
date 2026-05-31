@@ -2,6 +2,7 @@ package com.lendmate.api_gateway.filter;
 
 import com.lendmate.api_gateway.config.SecurityPaths;
 import com.lendmate.api_gateway.service.JwtService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
@@ -16,6 +17,9 @@ import reactor.core.publisher.Mono;
 public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
     private final JwtService jwtService;
 
+    @Value("${gateway.security.enabled:true}")
+    private boolean securityEnabled;
+
     public JwtAuthenticationFilter(JwtService jwtService) {
         this.jwtService = jwtService;
     }
@@ -23,37 +27,52 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange,
                              GatewayFilterChain chain) {
-        ServerHttpRequest request = exchange.getRequest();
-        System.out.println("request.getURI().getPath() " + request.getURI().getPath());
-        boolean isPublic = SecurityPaths.PUBLIC_PATHS.stream()
-                .anyMatch(path -> request.getURI().getPath().startsWith(path));
-        System.out.println("isPublic" + isPublic);
-
-        if (!isPublic) {
-            if (!request.getHeaders().containsKey("Authorization")) {
-                return this.onError(exchange, "Missing Authorization header", HttpStatus.UNAUTHORIZED);
-            }
-
-            String authHeader = request.getHeaders().get("Authorization").get(0);
-            if (authHeader != null && authHeader.startsWith("Bearer ")) {
-                String token = authHeader.substring(7);
-                try {
-                    if (token.isEmpty() || jwtService.validateToken(token) == false) {
-                        return this.onError(exchange, "Invalid JWT token", HttpStatus.UNAUTHORIZED);
-                    }
-
-                } catch (Exception e) {
-                    return this.onError(exchange, "JWT token is not valid!", HttpStatus.UNAUTHORIZED);
-                }
-            } else {
-                return this.onError(exchange, "Invalid Authorization header format", HttpStatus.UNAUTHORIZED);
-            }
+        if (!securityEnabled) {
+            return chain.filter(exchange);
         }
 
-        return chain.filter(exchange);
+        ServerHttpRequest request = exchange.getRequest();
+        boolean isPublic = SecurityPaths.PUBLIC_PATHS.stream()
+                .anyMatch(path -> request.getURI().getPath().startsWith(path));
+
+        if (isPublic) {
+            return chain.filter(exchange);
+        }
+
+        if (!request.getHeaders().containsKey("Authorization")) {
+            return onError(exchange, HttpStatus.UNAUTHORIZED);
+        }
+
+        String authHeader = request.getHeaders().getFirst("Authorization");
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return onError(exchange, HttpStatus.UNAUTHORIZED);
+        }
+
+        String token = authHeader.substring(7);
+
+        try {
+            if (!jwtService.validateToken(token)) {
+                return onError(exchange, HttpStatus.UNAUTHORIZED);
+            }
+
+            String email = jwtService.extractUsername(token);
+            String role = jwtService.extractRole(token);
+            String userId = jwtService.extractUserId(token);
+
+            ServerHttpRequest mutatedRequest = request.mutate()
+                    .header("X-User-Email", email)
+                    .header("X-User-Role", role)
+                    .header("X-User-Id", userId)
+                    .build();
+
+            return chain.filter(exchange.mutate().request(mutatedRequest).build());
+
+        } catch (Exception e) {
+            return onError(exchange, HttpStatus.UNAUTHORIZED);
+        }
     }
 
-    private Mono<Void> onError(org.springframework.web.server.ServerWebExchange exchange, String err, HttpStatus httpStatus) {
+    private Mono<Void> onError(ServerWebExchange exchange, HttpStatus httpStatus) {
         ServerHttpResponse response = exchange.getResponse();
         response.setStatusCode(httpStatus);
         return response.setComplete();
