@@ -58,7 +58,6 @@ spring:
           filters:
             - RewritePath=/product-service/(?<segment>.*), /${segment}
 
-
       globalcors:
         cors-configurations:
           '[/**]':
@@ -76,7 +75,6 @@ spring:
             allow-credentials: true
             max-age: 3600
 
-      security:
-        enabled: true
-
-
+gateway:
+  security:
+    enabled: true
