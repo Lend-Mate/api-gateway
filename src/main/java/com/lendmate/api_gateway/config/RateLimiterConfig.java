@@ -9,6 +9,11 @@ import reactor.core.publisher.Mono;
 
 @Configuration
 public class RateLimiterConfig {
+    private final JwtService jwtService;
+
+    public RateLimiterConfig(JwtService jwtService) {
+        this.jwtService = jwtService;
+    }
 
     @Bean
     public KeyResolver userKeyResolver(JwtService jwtService) {
@@ -27,6 +32,10 @@ public class RateLimiterConfig {
             }
 
             String token = authHeader.substring(7);
+
+            if (!jwtService.validateToken(token)) {
+                return Mono.just("anonymous");
+            }
 
             return Mono.just(
                     jwtService.extractUsername(token)
