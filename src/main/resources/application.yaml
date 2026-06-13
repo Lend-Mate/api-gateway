@@ -60,6 +60,23 @@ spring:
           filters:
             - RewritePath=/product-service/(?<segment>.*), /${segment}
 
+        - id: order_service_route
+          uri: http://order-service:8080
+          predicates:
+            - Path=/carts/**,/orders/**,/order-items/**
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 20
+                redis-rate-limiter.burstCapacity: 40
+                key-resolver: "#{@userKeyResolver}"
+        - id: order_service_docs
+          uri: http://order-service:8080
+          predicates:
+            - Path=/order-service/v3/api-docs
+          filters:
+            - RewritePath=/order-service/(?<segment>.*), /${segment}
+
       globalcors:
         cors-configurations:
           '[/**]':
