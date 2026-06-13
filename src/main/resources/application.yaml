@@ -94,6 +94,9 @@ spring:
             allow-credentials: true
             max-age: 3600
 
+      default-filters:
+        - DeduplicateResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials RETAIN_FIRST
+
 gateway:
   security:
     enabled: false
