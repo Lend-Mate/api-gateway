@@ -11,6 +11,10 @@ springdoc:
         url: /api/product-service/v3/api-docs
       - name: user-service
         url: /api/user-service/v3/api-docs
+      - name: order-service
+        url: /api/order-service/v3/api-docs
+      - name: notification-service
+        url: /api/notification-service/v3/api-docs
   webjars:
     prefix: ""
 
