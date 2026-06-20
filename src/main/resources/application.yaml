@@ -27,7 +27,7 @@ spring:
     gateway:
       routes:
         - id: user_service_route
-          uri: http://user-service:8080
+          uri: http://user-service:8081
           predicates:
             - Path=/auth/**,/user/**
           filters:
@@ -37,7 +37,7 @@ spring:
                 redis-rate-limiter.burstCapacity: 3 # maksimum request atma hakkı
                 key-resolver: "#{@userKeyResolver}"
         - id: user_service_docs
-          uri: http://user-service:8080
+          uri: http://user-service:8081
           predicates:
             - Path=/user-service/v3/api-docs
           filters:
@@ -61,7 +61,7 @@ spring:
             - RewritePath=/product-service/(?<segment>.*), /${segment}
 
         - id: order_service_route
-          uri: http://order-service:8080
+          uri: http://order-service:8082
           predicates:
             - Path=/carts/**,/orders/**,/order-items/**
           filters:
@@ -71,11 +71,29 @@ spring:
                 redis-rate-limiter.burstCapacity: 40
                 key-resolver: "#{@userKeyResolver}"
         - id: order_service_docs
-          uri: http://order-service:8080
+          uri: http://order-service:8082
           predicates:
             - Path=/order-service/v3/api-docs
           filters:
             - RewritePath=/order-service/(?<segment>.*), /${segment}
+
+
+        - id: notification_service_route
+          uri: http://notification-service:8083
+          predicates:
+            - Path=/notifications/**
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 20
+                redis-rate-limiter.burstCapacity: 40
+                key-resolver: "#{@userKeyResolver}"
+        - id: notification_service_docs
+          uri: http://notification-service:8083
+          predicates:
+            - Path=/notification-service/v3/api-docs
+          filters:
+            - RewritePath=/notification-service/(?<segment>.*), /${segment}
 
 gateway:
   security:
