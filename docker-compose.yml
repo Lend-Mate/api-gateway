@@ -10,3 +10,5 @@ services:
     restart: unless-stopped
     networks:
       - lendmate-net
+    environment:
+      JAVA_OPTS: "-Xmx150m -Xms96m"
