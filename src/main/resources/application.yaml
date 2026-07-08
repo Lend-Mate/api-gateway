@@ -50,7 +50,7 @@ spring:
         - id: product_service_route
           uri: http://product-service:8080
           predicates:
-            - Path=/products/**,/categories/**,/product-availability/**,/product-image/**,/favourites/**,/files/**
+            - Path=/products/**,/categories/**,/product-availability/**,/product-image/**,/product-comments/**,/favourites/**,/files/**
           filters:
             - name: RequestRateLimiter
               args:
