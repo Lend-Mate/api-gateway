@@ -1,6 +1,6 @@
 # application.yml
 server:
-  port: 8080 # The port for your API Gateway
+  port: 8084 # The port for your API Gateway
 
 springdoc:
   swagger-ui:
@@ -29,75 +29,77 @@ spring:
       port: 6379
   cloud:
     gateway:
-      routes:
-        - id: user_service_route
-          uri: http://user-service:8081
-          predicates:
-            - Path=/auth/**,/user/**
-          filters:
-            - name: RequestRateLimiter
-              args:
-                redis-rate-limiter.replenishRate: 1 # her saniyede kaç tane request atma hakkı eklensin
-                redis-rate-limiter.burstCapacity: 3 # maksimum request atma hakkı
-                key-resolver: "#{@userKeyResolver}"
-        - id: user_service_docs
-          uri: http://user-service:8081
-          predicates:
-            - Path=/user-service/v3/api-docs
-          filters:
-            - RewritePath=/user-service/(?<segment>.*), /${segment}
+      server:
+        webflux:
+          routes:
+            - id: user_service_route
+              uri: http://user-service:8081
+              predicates:
+                - Path=/auth/**,/user/**
+              filters:
+                - name: RequestRateLimiter
+                  args:
+                    redis-rate-limiter.replenishRate: 1 # her saniyede kaç tane request atma hakkı eklensin
+                    redis-rate-limiter.burstCapacity: 3 # maksimum request atma hakkı
+                    key-resolver: "#{@userKeyResolver}"
+            - id: user_service_docs
+              uri: http://user-service:8081
+              predicates:
+                - Path=/user-service/v3/api-docs
+              filters:
+                - RewritePath=/user-service/(?<segment>.*), /${segment}
 
-        - id: product_service_route
-          uri: http://product-service:8080
-          predicates:
-            - Path=/products/**,/categories/**,/product-availability/**,/product-image/**,/product-comments/**,/favourites/**,/files/**
-          filters:
-            - name: RequestRateLimiter
-              args:
-                redis-rate-limiter.replenishRate: 20
-                redis-rate-limiter.burstCapacity: 40
-                key-resolver: "#{@userKeyResolver}"
-        - id: product_service_docs
-          uri: http://product-service:8080
-          predicates:
-            - Path=/product-service/v3/api-docs
-          filters:
-            - RewritePath=/product-service/(?<segment>.*), /${segment}
+            - id: product_service_route
+              uri: http://product-service:8080
+              predicates:
+                - Path=/products/**,/categories/**,/product-availability/**,/product-image/**,/product-comments/**,/favourites/**,/files/**
+              filters:
+                - name: RequestRateLimiter
+                  args:
+                    redis-rate-limiter.replenishRate: 20
+                    redis-rate-limiter.burstCapacity: 40
+                    key-resolver: "#{@userKeyResolver}"
+            - id: product_service_docs
+              uri: http://product-service:8080
+              predicates:
+                - Path=/product-service/v3/api-docs
+              filters:
+                - RewritePath=/product-service/(?<segment>.*), /${segment}
 
-        - id: order_service_route
-          uri: http://order-service:8082
-          predicates:
-            - Path=/carts/**,/orders/**,/order-items/**
-          filters:
-            - name: RequestRateLimiter
-              args:
-                redis-rate-limiter.replenishRate: 20
-                redis-rate-limiter.burstCapacity: 40
-                key-resolver: "#{@userKeyResolver}"
-        - id: order_service_docs
-          uri: http://order-service:8082
-          predicates:
-            - Path=/order-service/v3/api-docs
-          filters:
-            - RewritePath=/order-service/(?<segment>.*), /${segment}
+            - id: order_service_route
+              uri: http://order-service:8082
+              predicates:
+                - Path=/carts/**,/orders/**,/order-items/**
+              filters:
+                - name: RequestRateLimiter
+                  args:
+                    redis-rate-limiter.replenishRate: 20
+                    redis-rate-limiter.burstCapacity: 40
+                    key-resolver: "#{@userKeyResolver}"
+            - id: order_service_docs
+              uri: http://order-service:8082
+              predicates:
+                - Path=/order-service/v3/api-docs
+              filters:
+                - RewritePath=/order-service/(?<segment>.*), /${segment}
 
 
-        - id: notification_service_route
-          uri: http://notification-service:8083
-          predicates:
-            - Path=/notifications/**
-          filters:
-            - name: RequestRateLimiter
-              args:
-                redis-rate-limiter.replenishRate: 20
-                redis-rate-limiter.burstCapacity: 40
-                key-resolver: "#{@userKeyResolver}"
-        - id: notification_service_docs
-          uri: http://notification-service:8083
-          predicates:
-            - Path=/notification-service/v3/api-docs
-          filters:
-            - RewritePath=/notification-service/(?<segment>.*), /${segment}
+            - id: notification_service_route
+              uri: http://notification-service:8083
+              predicates:
+                - Path=/notifications/**
+              filters:
+                - name: RequestRateLimiter
+                  args:
+                    redis-rate-limiter.replenishRate: 20
+                    redis-rate-limiter.burstCapacity: 40
+                    key-resolver: "#{@userKeyResolver}"
+            - id: notification_service_docs
+              uri: http://notification-service:8083
+              predicates:
+                - Path=/notification-service/v3/api-docs
+              filters:
+                - RewritePath=/notification-service/(?<segment>.*), /${segment}
 
 gateway:
   security:
