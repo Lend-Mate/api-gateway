@@ -11,4 +11,9 @@ services:
     networks:
       - lendmate-net
     environment:
-      JAVA_OPTS: "-Xmx150m -Xms96m"
+      JAVA_OPTS: >-
+        -XX:MaxRAMPercentage=60.0 
+        -XX:+UseSerialGC 
+        -Xss256k 
+        -XX:MaxMetaspaceSize=100m
+    mem_limit: 300m
