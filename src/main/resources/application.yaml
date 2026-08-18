@@ -1,106 +1,22 @@
-# application.yml
-server:
-  port: 8084 # The port for your API Gateway
-
-springdoc:
-  swagger-ui:
-    path: /swagger-ui.html
-    config-url: /api/v3/api-docs/swagger-config
-    urls:
-      - name: product-service
-        url: /api/product-service/v3/api-docs
-      - name: user-service
-        url: /api/user-service/v3/api-docs
-      - name: order-service
-        url: /api/order-service/v3/api-docs
-      - name: notification-service
-        url: /api/notification-service/v3/api-docs
-  webjars:
-    prefix: ""
-
 spring:
-  main:
-    web-application-type: reactive
   application:
     name: api-gateway
-  data:
-    redis:
-      host: redis
-      port: 6379
-  cloud:
-    gateway:
-      server:
-        webflux:
-          routes:
-            - id: user_service_route
-              uri: http://user-service:8081
-              predicates:
-                - Path=/auth/**,/user/**
-              filters:
-                - name: RequestRateLimiter
-                  args:
-                    redis-rate-limiter.replenishRate: 1 # her saniyede kaç tane request atma hakkı eklensin
-                    redis-rate-limiter.burstCapacity: 3 # maksimum request atma hakkı
-                    key-resolver: "#{@userKeyResolver}"
-            - id: user_service_docs
-              uri: http://user-service:8081
-              predicates:
-                - Path=/user-service/v3/api-docs
-              filters:
-                - RewritePath=/user-service/(?<segment>.*), /${segment}
+  profiles:
+    active: ${ACTIVE_PROFILE:dev}
 
-            - id: product_service_route
-              uri: http://product-service:8080
-              predicates:
-                - Path=/products/**,/categories/**,/product-availability/**,/product-image/**,/product-comments/**,/favourites/**,/files/**
-              filters:
-                - name: RequestRateLimiter
-                  args:
-                    redis-rate-limiter.replenishRate: 20
-                    redis-rate-limiter.burstCapacity: 40
-                    key-resolver: "#{@userKeyResolver}"
-            - id: product_service_docs
-              uri: http://product-service:8080
-              predicates:
-                - Path=/product-service/v3/api-docs
-              filters:
-                - RewritePath=/product-service/(?<segment>.*), /${segment}
+server:
+  port: 8084
 
-            - id: order_service_route
-              uri: http://order-service:8082
-              predicates:
-                - Path=/carts/**,/orders/**,/order-items/**
-              filters:
-                - name: RequestRateLimiter
-                  args:
-                    redis-rate-limiter.replenishRate: 20
-                    redis-rate-limiter.burstCapacity: 40
-                    key-resolver: "#{@userKeyResolver}"
-            - id: order_service_docs
-              uri: http://order-service:8082
-              predicates:
-                - Path=/order-service/v3/api-docs
-              filters:
-                - RewritePath=/order-service/(?<segment>.*), /${segment}
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+    import: "optional:configserver:${CONFIG_SERVER_URL:http://localhost:8888}"
 
-
-            - id: notification_service_route
-              uri: http://notification-service:8083
-              predicates:
-                - Path=/notifications/**
-              filters:
-                - name: RequestRateLimiter
-                  args:
-                    redis-rate-limiter.replenishRate: 20
-                    redis-rate-limiter.burstCapacity: 40
-                    key-resolver: "#{@userKeyResolver}"
-            - id: notification_service_docs
-              uri: http://notification-service:8083
-              predicates:
-                - Path=/notification-service/v3/api-docs
-              filters:
-                - RewritePath=/notification-service/(?<segment>.*), /${segment}
-
-gateway:
-  security:
-    enabled: false
+---
+spring:
+  config:
+    activate:
+      on-profile: stage
+    import: "configserver:${CONFIG_SERVER_URL}"
