@@ -18,5 +18,12 @@ spring:
 spring:
   config:
     activate:
+      on-profile: stage
+    import: "configserver:${CONFIG_SERVER_URL:http://config-server:8888}"
+
+---
+spring:
+  config:
+    activate:
       on-profile: prod
     import: "configserver:${CONFIG_SERVER_URL:http://config-server:8888}"
