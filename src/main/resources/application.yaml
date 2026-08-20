@@ -2,7 +2,7 @@ spring:
   application:
     name: api-gateway
   profiles:
-    active: ${ACTIVE_PROFILE:dev}
+    active: ${SPRING_PROFILES_ACTIVE:dev}
 
 server:
   port: 8084
@@ -18,5 +18,5 @@ spring:
 spring:
   config:
     activate:
-      on-profile: stage
-    import: "configserver:${CONFIG_SERVER_URL}"
+      on-profile: prod
+    import: "configserver:${CONFIG_SERVER_URL:http://config-server:8888}"

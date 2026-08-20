@@ -11,6 +11,7 @@ services:
     networks:
       - lendmate-net
     environment:
+      JWT_SECRET: 5367566859703373367639792F423F452848284D6251655468576D5A71347437
       JAVA_OPTS: >-
         -XX:MaxRAMPercentage=60.0 
         -XX:+UseSerialGC 
