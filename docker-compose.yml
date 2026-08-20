@@ -11,6 +11,7 @@ services:
     networks:
       - lendmate-net
     environment:
+      SPRING_PROFILES_ACTIVE: prod
       JWT_SECRET: 5367566859703373367639792F423F452848284D6251655468576D5A71347437
       OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4318
       OTEL_SERVICE_NAME: api-gateway
