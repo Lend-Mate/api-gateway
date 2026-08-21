@@ -21,4 +21,4 @@ services:
         -XX:+UseSerialGC 
         -Xss256k 
         -XX:MaxMetaspaceSize=100m
-    mem_limit: 600m
+    mem_limit: 300m
