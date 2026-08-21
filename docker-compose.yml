@@ -20,5 +20,5 @@ services:
         -XX:MaxRAMPercentage=60.0 
         -XX:+UseSerialGC 
         -Xss256k 
-        -XX:MaxMetaspaceSize=100m
+        -XX:MaxMetaspaceSize=256m
     mem_limit: 300m
