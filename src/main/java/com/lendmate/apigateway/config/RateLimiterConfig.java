@@ -1,7 +1,7 @@
-package com.lendmate.api_gateway.config;
+package com.lendmate.apigateway.config;
 
 
-import com.lendmate.api_gateway.service.JwtService;
+import com.lendmate.apigateway.service.JwtService;
 import org.springframework.cloud.gateway.filter.ratelimit.KeyResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

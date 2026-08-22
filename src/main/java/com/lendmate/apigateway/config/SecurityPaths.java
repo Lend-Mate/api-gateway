@@ -1,4 +1,4 @@
-package com.lendmate.api_gateway.config;
+package com.lendmate.apigateway.config;
 
 import java.util.List;
 
