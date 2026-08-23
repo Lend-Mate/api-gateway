@@ -1,4 +1,4 @@
-package com.lendmate.api_gateway.service;
+package com.lendmate.apigateway.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;

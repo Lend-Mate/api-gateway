@@ -1,7 +1,7 @@
-package com.lendmate.api_gateway.filter;
+package com.lendmate.apigateway.filter;
 
-import com.lendmate.api_gateway.config.SecurityPaths;
-import com.lendmate.api_gateway.service.JwtService;
+import com.lendmate.apigateway.config.SecurityPaths;
+import com.lendmate.apigateway.service.JwtService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
