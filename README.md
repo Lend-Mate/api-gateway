@@ -1,6 +1,6 @@
 # API Gateway
 
-> Lendmate servisleri için merkezi yönlendirme, JWT doğrulama, rate limiting ve izleme katmanı sağlayan Spring Cloud Gateway servisi.
+Lendmate servisleri için merkezi yönlendirme, JWT doğrulama, rate limiting ve izleme katmanı sağlayan Spring Cloud Gateway servisi.
 
 ---
 
@@ -84,10 +84,6 @@ Filtre sırası önemlidir: trace propagation filtresi en yüksek öncelikle ça
 ### Tablolar
 
 Bu servis kendi veritabanı tablolarını kullanmaz. Rate limiting için reactive Redis bağımlılığı bulunur; Redis kalıcı iş verisi veritabanı olarak kullanılmaz.
-
-### Şema Diyagramı
-
-Bu servis için veritabanı şeması bulunmamaktadır.
 
 ---
 
