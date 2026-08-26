@@ -1,6 +1,6 @@
 # API Gateway
 
-Lendmate servisleri için merkezi yönlendirme, JWT doğrulama, rate limiting ve izleme katmanı sağlayan Spring Cloud Gateway servisi.
+HemenKirala servisleri için merkezi yönlendirme, JWT doğrulama, rate limiting ve izleme katmanı sağlayan Spring Cloud Gateway servisi.
 
 ---
 
